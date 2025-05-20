@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手机摄像头调用示例</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    video {
+      width: 100%;
+      max-width: 640px;
+      height: auto;
+      border: 2px solid #333;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>摄像头实时画面</h2>
+  <video id="camera" autoplay playsinline></video>
+  <p id="status">正在请求摄像头权限...</p>
+
+  <script>
+    async function initCamera() {
+    const status = document.getElementById("status");
+    const video = document.getElementById("camera");
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        status.textContent = "当前浏览器不支持摄像头访问，请使用新版 Chrome 或 Safari。";
+        return;
+    }
+
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
+        audio: false
+        });
+        video.srcObject = stream;
+        status.textContent = "摄像头已开启";
+    } catch (err) {
+        status.textContent = "访问摄像头失败：" + err.message;
+    }
+    }
+
+  </script>
+
+</body>
+</html>
